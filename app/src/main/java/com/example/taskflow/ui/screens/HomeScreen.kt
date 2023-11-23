@@ -2,6 +2,7 @@ package com.example.taskflow.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -40,10 +43,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.taskflow.R
+import com.example.taskflow.ui.commonUI.AnimatedCircularProgressIndicator
 import com.example.taskflow.ui.theme.LightPurple
 import com.example.taskflow.ui.theme.LightSkyBlue
+import com.example.taskflow.ui.theme.Purple40
+import com.example.taskflow.ui.theme.Purple80
+import com.example.taskflow.ui.theme.PurpleGrey40
 
-@Preview
+@Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(){
@@ -67,7 +74,7 @@ fun HomeScreen(){
                             .weight(1f)
                             .padding(end = 4.dp)
                 ) {
-                    StatsCard(
+                    StatsItemCard(
                             color = LightPurple,
                             cardTitle = "Task Today",
                             annotatedString = "8",
@@ -80,7 +87,7 @@ fun HomeScreen(){
                             .weight(1f)
                             .padding(start = 4.dp)
                 ) {
-                    StatsCard(
+                    StatsItemCard(
                             color = LightSkyBlue ,
                             cardTitle = "In Progress" ,
                             annotatedString = "4" ,
@@ -88,10 +95,13 @@ fun HomeScreen(){
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            TaskItemList()
         }
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -140,7 +150,9 @@ fun HomeScreenTopBar(){
 }
 
 @Composable
-fun StatsCard(color: Color, cardTitle: String, annotatedString: String, modifier: Modifier = Modifier){
+fun StatsItemCard(color: Color ,
+                  cardTitle: String ,
+                  annotatedString: String , modifier: Modifier = Modifier){
     Card (shape = RoundedCornerShape(10.dp)) {
         Column(modifier = Modifier
             .padding(10.dp)
@@ -197,3 +209,95 @@ fun IntroText(modifier: Modifier){
         } )
     }
 }
+
+@Composable
+fun TaskItemCard( modifier: Modifier = Modifier){
+    Card(modifier = modifier.fillMaxWidth(),
+         shape = RoundedCornerShape(25.dp)) {
+        Column(modifier = Modifier.padding(10.dp)) {
+            Row(modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+
+                    Text(text = "3D Character Cute Robot",
+                         fontSize = 25.sp,)
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Text(text = "There are 3 Unfinished Tasks",
+                         fontSize = 13.sp,)
+
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                AnimatedCircularProgressIndicator(
+                        currentValue = 17,
+                        maxValue = 20,
+                        progressBackgroundColor = Purple80,
+                        progressIndicatorColor = PurpleGrey40,
+                        completedColor = Purple40,
+                        modifier = Modifier
+                            .align(alignment = Alignment.CenterVertically)
+                            .size(60.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            Row {
+                Box(modifier = Modifier
+                    .background(color = Color.Red, shape = RoundedCornerShape(13.dp)),
+                    contentAlignment = Alignment.Center) {
+                    Text(text = "Important",
+                         modifier = Modifier.padding(top = 5.dp, start = 12.dp, end = 12.dp, bottom = 5.dp))
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+                Box(modifier = Modifier
+                    .background(color = Color.Red, shape = RoundedCornerShape(13.dp)),
+                    contentAlignment = Alignment.Center) {
+                    Text(text = "16 Oct 2023",
+                         modifier = Modifier.padding(top = 5.dp, start = 12.dp, end = 12.dp, bottom = 5.dp))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun DateItemCard(modifier: Modifier = Modifier) {
+    Card(
+            modifier = modifier ,
+    ) {
+        Column(
+                modifier = Modifier.padding(10.dp) ,
+                horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "Wed")
+            Spacer(modifier = Modifier.height(5.dp))
+            Text(text = "17")
+        }
+    }
+}
+
+@Composable
+fun TaskItemList(modifier: Modifier = Modifier){
+
+    Column {
+        Text(text = "Your Task",
+             fontSize = 18.sp,
+             fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(15.dp))
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            items(9) {
+                DateItemCard()
+            }
+        }
+        Spacer(modifier = Modifier.height(18.dp))
+        LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            items(2) {
+                TaskItemCard()
+            }
+        }
+    }
+
+}
+
