@@ -106,25 +106,27 @@ fun HomeScreen(){
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreenTopBar(){
-    TopAppBar(title = {},
-            navigationIcon = {
-        // Image on the left
-                Image(
-                        painter = painterResource(id = R.drawable.husky) ,
-                        contentDescription = null ,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .size(40.dp)
-                )
-            } ,
+    TopAppBar(title = {} ,
+              navigationIcon = {
+                  // Image on the left
+                  Image(
+                          painter = painterResource(id = R.drawable.husky) ,
+                          contentDescription = null ,
+                          contentScale = ContentScale.Crop ,
+                          modifier = Modifier
+                              .clip(CircleShape)
+                              .size(40.dp)
+                  )
+              } ,
               actions = {
                   // Icons on the right
                   Row {
-                      Box(modifier = Modifier
-                          .size(40.dp)
-                          .background(Color.White , shape = CircleShape),
-                          contentAlignment = Alignment.Center) {
+                      Box(
+                              modifier = Modifier
+                                  .size(40.dp)
+                                  .background(Color.White , shape = CircleShape) ,
+                              contentAlignment = Alignment.Center
+                      ) {
                           Icon(
                                   imageVector = Icons.Outlined.Add ,
                                   contentDescription = null ,
@@ -133,10 +135,12 @@ fun HomeScreenTopBar(){
                           )
                       }
                       Spacer(modifier = Modifier.width(8.dp))
-                      Box(modifier = Modifier
-                          .size(40.dp)
-                          .background(Color.White , shape = CircleShape),
-                          contentAlignment = Alignment.Center) {
+                      Box(
+                              modifier = Modifier
+                                  .size(40.dp)
+                                  .background(Color.White , shape = CircleShape) ,
+                              contentAlignment = Alignment.Center
+                      ) {
                           Icon(
                                   imageVector = Icons.Outlined.Notifications ,
                                   contentDescription = null ,
