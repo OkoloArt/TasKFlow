@@ -49,14 +49,23 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.taskflow.R
 
-
+@Preview(showBackground = true)
 @Composable
 fun TaskDetailScreen() {
+    Column(modifier = Modifier.padding(10.dp)) {
+        TopBar()
+        Spacer(modifier = Modifier.height(20.dp))
+        TaskDetail()
+    }
 }
 
 @Composable
@@ -99,7 +108,6 @@ fun IconAndText(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true)
 @Composable
 fun TaskDetail(modifier: Modifier = Modifier){
     val animatedProgress by animateFloatAsState(
@@ -112,24 +120,46 @@ fun TaskDetail(modifier: Modifier = Modifier){
             .background(color = Color.Red, shape = RoundedCornerShape(13.dp)),
             contentAlignment = Alignment.Center) {
             Text(text = "Important",
-                 modifier = Modifier.padding(top = 5.dp, start = 12.dp, end = 12.dp, bottom = 5.dp))
+                 modifier = Modifier.padding(top = 5.dp, start = 12.dp, end = 12.dp, bottom = 5.dp),
+                 color = Color.White)
         }
-        Text(text = "3d Character Cute Robot")
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(text = "3d Character Cute Robot",
+             fontWeight = FontWeight.SemiBold,
+             fontSize = 26.sp,
+             fontFamily = FontFamily.Serif
+        )
+        Spacer(modifier = Modifier.height(12.dp))
         Row {
             ImageAndTextCard(textTitle = "Created" , textValue = "Smith" , modifier.weight(1f))
             ImageAndTextCard(textTitle = "Date Due" , textValue = "16th Oct 2023" , modifier.weight(1f))
         }
-        Text(text = "Description")
-        Text(text = "Create a 3d character using blender, the style used is simple and cute and uses soft colors")
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(text = "Description",
+             fontSize = 16.sp,
+             fontWeight = FontWeight.W500)
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(text = stringResource(R.string.dummy),
+             fontWeight = FontWeight.Normal)
+        Spacer(modifier = Modifier.height(13.dp))
+        Text(text = "75%",
+             fontWeight = FontWeight.SemiBold,
+             modifier = Modifier.align(alignment = Alignment.End))
+        Spacer(modifier = Modifier.height(8.dp))
         LinearProgressIndicator(
-                progress = 0.2f ,
+                progress = animatedProgress ,
                 color = Color.Green ,
                 modifier = Modifier
+                    .fillMaxWidth()
                     .height(8.dp)
                     .clip(RoundedCornerShape(16.dp)) ,
                 trackColor = Color.Green
         )
-        Text(text = "SubTasks")
+        Spacer(modifier = Modifier.height(15.dp))
+        Text(text = "SubTasks",
+             fontSize = 16.sp,
+             fontWeight = FontWeight.W500)
+        Spacer(modifier = Modifier.height(14.dp))
         SubTasks()
     }
 }
@@ -222,12 +252,14 @@ fun SubTaskItem(subTaskTitle: String, modifier: Modifier = Modifier) {
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(dimensionResource(R.dimen.padding_small))) {
-                Box(Modifier.align(alignment = Alignment.CenterVertically)
-                        .toggleable(
-                        value = checkedState,
-                        onValueChange = { onStateChange(!checkedState) },
-                        role = Role.Checkbox
-                )) {
+                Box(
+                        Modifier
+                            .align(alignment = Alignment.CenterVertically)
+                            .toggleable(
+                                    value = checkedState ,
+                                    onValueChange = { onStateChange(!checkedState) } ,
+                                    role = Role.Checkbox
+                            )) {
                     Checkbox(
                             checked = checkedState ,
                             onCheckedChange = null

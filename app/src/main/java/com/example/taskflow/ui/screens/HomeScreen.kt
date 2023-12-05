@@ -247,21 +247,28 @@ fun TaskItemCard( modifier: Modifier = Modifier){
             }
             Spacer(modifier = Modifier.height(12.dp))
             Row {
-                Box(modifier = Modifier
-                    .background(color = Color.Red, shape = RoundedCornerShape(13.dp)),
-                    contentAlignment = Alignment.Center) {
-                    Text(text = "Important",
-                         modifier = Modifier.padding(top = 5.dp, start = 12.dp, end = 12.dp, bottom = 5.dp))
+                CustomBox(color = Color.Red) {
+                    Text(text = "Important", modifier = it,
+                         color = Color.White)
                 }
                 Spacer(modifier = Modifier.width(10.dp))
-                Box(modifier = Modifier
-                    .background(color = Color.Red, shape = RoundedCornerShape(13.dp)),
-                    contentAlignment = Alignment.Center) {
-                    Text(text = "16 Oct 2023",
-                         modifier = Modifier.padding(top = 5.dp, start = 12.dp, end = 12.dp, bottom = 5.dp))
+                CustomBox(color = LightPurple){
+                    Text(text = "16 Oct 2023", modifier = it,
+                         color = Color.White)
                 }
             }
         }
+    }
+}
+
+@Composable
+fun CustomBox(color: Color, content: @Composable (Modifier) -> Unit) {
+    Box(
+            modifier = Modifier
+                .background(color = color, shape = RoundedCornerShape(13.dp)),
+            contentAlignment = Alignment.Center
+    ) {
+        content(Modifier.padding(top = 5.dp, start = 12.dp, end = 12.dp, bottom = 5.dp))
     }
 }
 
