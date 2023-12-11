@@ -25,27 +25,17 @@ class MainActivity : ComponentActivity()
                         modifier = Modifier.fillMaxSize() ,
                         color = MaterialTheme.colorScheme.background
                 ) {
-                   TaskDetail()
+                  TaskFlowApp()
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String , modifier: Modifier = Modifier)
-{
-    Text(
-            text = "Hello $name!" ,
-            modifier = modifier
-    )
-}
-
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview()
-{
+fun GreetingPreview() {
     TaskFlowTheme {
-        Greeting("Android")
+       TaskFlowApp()
     }
 }

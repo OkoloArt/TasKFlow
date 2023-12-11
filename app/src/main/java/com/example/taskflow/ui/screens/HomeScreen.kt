@@ -2,6 +2,7 @@ package com.example.taskflow.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,13 +51,13 @@ import com.example.taskflow.ui.theme.Purple40
 import com.example.taskflow.ui.theme.Purple80
 import com.example.taskflow.ui.theme.PurpleGrey40
 
-@Preview(showBackground = true)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(){
+fun HomeScreen(navigateToAddTask: () -> Unit, navigateToDetails: () -> Unit){
 
     Scaffold(
-            topBar = { HomeScreenTopBar()}
+            topBar = { HomeScreenTopBar(navigateToAddTask)}
     ) { innerPadding ->
 
         Column(modifier = Modifier
@@ -98,14 +99,14 @@ fun HomeScreen(){
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            TaskItemList()
+            TaskItemList(onItemClick = navigateToDetails )
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenTopBar(){
+fun HomeScreenTopBar(navigateToAddTask : () -> Unit){
     TopAppBar(title = {} ,
               navigationIcon = {
                   // Image on the left
@@ -124,7 +125,8 @@ fun HomeScreenTopBar(){
                       Box(
                               modifier = Modifier
                                   .size(40.dp)
-                                  .background(Color.White , shape = CircleShape) ,
+                                  .background(Color.White , shape = CircleShape)
+                                  .clickable { navigateToAddTask() },
                               contentAlignment = Alignment.Center
                       ) {
                           Icon(
@@ -215,16 +217,17 @@ fun IntroText(modifier: Modifier){
 }
 
 @Composable
-fun TaskItemCard( modifier: Modifier = Modifier){
-    Card(modifier = modifier.fillMaxWidth(),
+fun TaskItemCard(onClick: () -> Unit, modifier: Modifier = Modifier){
+    Card(modifier = modifier.fillMaxWidth()
+        .clickable { onClick() },
          shape = RoundedCornerShape(25.dp)) {
-        Column(modifier = Modifier.padding(10.dp)) {
-            Row(modifier = Modifier.fillMaxWidth(),
+        Column(modifier = Modifier.padding(10.dp, bottom = 12.dp, top = 12.dp)) {
+            Row(modifier = Modifier.fillMaxWidth().padding(end = 10.dp),
                 verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.weight(1f)) {
 
                     Text(text = "3D Character Cute Robot",
-                         fontSize = 25.sp,)
+                         fontSize = 22.sp,)
 
                     Spacer(modifier = Modifier.height(12.dp))
 
@@ -242,19 +245,21 @@ fun TaskItemCard( modifier: Modifier = Modifier){
                         completedColor = Purple40,
                         modifier = Modifier
                             .align(alignment = Alignment.CenterVertically)
-                            .size(60.dp)
+                            .size(55.dp)
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
             Row {
                 CustomBox(color = Color.Red) {
                     Text(text = "Important", modifier = it,
-                         color = Color.White)
+                         color = Color.White,
+                         fontSize = 13.sp)
                 }
                 Spacer(modifier = Modifier.width(10.dp))
                 CustomBox(color = LightPurple){
                     Text(text = "16 Oct 2023", modifier = it,
-                         color = Color.White)
+                         color = Color.White,
+                         fontSize = 13.sp)
                 }
             }
         }
@@ -289,23 +294,23 @@ fun DateItemCard(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun TaskItemList(modifier: Modifier = Modifier){
+fun TaskItemList(onItemClick : () -> Unit, modifier: Modifier = Modifier){
 
     Column {
         Text(text = "Your Task",
              fontSize = 18.sp,
              fontWeight = FontWeight.Bold
         )
-        Spacer(modifier = Modifier.height(15.dp))
+        Spacer(modifier = Modifier.height(18.dp))
         LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             items(9) {
                 DateItemCard()
             }
         }
-        Spacer(modifier = Modifier.height(18.dp))
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Spacer(modifier = Modifier.height(20.dp))
+        LazyColumn(verticalArrangement = Arrangement.spacedBy(14.dp)) {
             items(2) {
-                TaskItemCard()
+                TaskItemCard(onClick = onItemClick)
             }
         }
     }

@@ -58,18 +58,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.taskflow.R
 
-@Preview(showBackground = true)
 @Composable
-fun TaskDetailScreen() {
+fun TaskDetailScreen(navigateBack: () -> Unit) {
     Column(modifier = Modifier.padding(10.dp)) {
-        TopBar()
+        TopBar(navigateBack)
         Spacer(modifier = Modifier.height(20.dp))
         TaskDetail()
     }
 }
 
 @Composable
-fun TopBar(){
+fun TopBar(navigateBack: () -> Unit){
     Box(modifier = Modifier.fillMaxWidth()) {
         Box(
                 modifier = Modifier
@@ -78,11 +77,13 @@ fun TopBar(){
                     .background(color = Color.White , shape = CircleShape) ,
                 contentAlignment = Alignment.Center
         ) {
-            Icon(
-                    imageVector = Icons.Outlined.KeyboardArrowLeft ,
-                    contentDescription = null ,
-                    modifier = Modifier.size(20.dp)
-            )
+            IconButton(onClick = { navigateBack() }) {
+                Icon(
+                        imageVector = Icons.Outlined.KeyboardArrowLeft ,
+                        contentDescription = null ,
+                        modifier = Modifier.size(20.dp)
+                )
+            }
         }
         IconAndText(modifier = Modifier.align(Alignment.CenterEnd))
     }

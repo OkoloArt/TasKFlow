@@ -35,18 +35,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-@Preview(showBackground = true)
+enum class Priority {
+    Basic,
+    Urgent,
+    Important
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddTaskScreen(modifier: Modifier = Modifier){
+fun AddTaskScreen(navigateBack: () -> Unit, modifier: Modifier = Modifier){
 
     var taskTitle by rememberSaveable { mutableStateOf("") }
     var taskDescription by rememberSaveable { mutableStateOf("") }
+    var selectedPriority by rememberSaveable { mutableStateOf(Priority.Basic) }
 
-    Scaffold(topBar = { AddTaskTopBar() }) { innerPadding ->
+    Scaffold(topBar = { AddTaskTopBar(navigateBack = navigateBack) }) { innerPadding ->
         Column(modifier = Modifier
             .padding(innerPadding)
             .padding(10.dp)) {
@@ -56,6 +61,7 @@ fun AddTaskScreen(modifier: Modifier = Modifier){
                     text = taskTitle ,
                     onTextChange = { taskTitle = it } ,
                     singleLine = true ,
+                    label = "Title",
                     modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(12.dp))
             Text(text = "What's the task all about?")
@@ -64,6 +70,7 @@ fun AddTaskScreen(modifier: Modifier = Modifier){
                     text = taskDescription ,
                     onTextChange = { taskDescription = it } ,
                     singleLine = false ,
+                    label = "Short Description",
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp))
@@ -75,11 +82,26 @@ fun AddTaskScreen(modifier: Modifier = Modifier){
             Text(text ="Task Priority" )
             Spacer(modifier = Modifier.height(12.dp))
             Row {
-                TaskType(onClick = false  , priority = "Basic", Modifier.weight(1f) )
+                PriorityType(
+                        isSelected = selectedPriority == Priority.Basic,
+                        onClick = { selectedPriority = Priority.Basic },
+                        priority = "Basic",
+                        modifier = Modifier.weight(1f)
+                )
                 Spacer(modifier = modifier.width(8.dp))
-                TaskType(onClick = false  , priority = "Urgent", Modifier.weight(1f) )
+                PriorityType(
+                        isSelected = selectedPriority == Priority.Urgent,
+                        onClick = { selectedPriority = Priority.Urgent },
+                        priority = "Urgent",
+                        modifier = Modifier.weight(1f)
+                )
                 Spacer(modifier = modifier.width(8.dp))
-                TaskType(onClick = true  , priority = "Important", Modifier.weight(1f) )
+                PriorityType(
+                        isSelected = selectedPriority == Priority.Important,
+                        onClick = { selectedPriority = Priority.Important },
+                        priority = "Important",
+                        modifier = Modifier.weight(1f)
+                )
             }
             Spacer(modifier = Modifier.height(12.dp))
             Button(onClick = { /*TODO*/ },
@@ -92,7 +114,7 @@ fun AddTaskScreen(modifier: Modifier = Modifier){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddTaskTopBar(modifier: Modifier = Modifier){
+fun AddTaskTopBar(navigateBack: () -> Unit, modifier: Modifier = Modifier){
     TopAppBar(
             title = { /*TODO*/ } ,
             navigationIcon = {
@@ -102,25 +124,30 @@ fun AddTaskTopBar(modifier: Modifier = Modifier){
                         contentDescription = null ,
                         contentScale = ContentScale.Crop ,
                         modifier = Modifier
+                            .clickable { navigateBack() }
                             .clip(CircleShape)
-                            .size(40.dp)
+                            .size(25.dp)
                 )
             } ,
     )
 }
 
 @Composable
-fun TaskType(onClick: Boolean, priority: String, modifier: Modifier = Modifier){
-    Box(modifier = modifier
-        .clickable { !onClick }
-        .background(
-                color = if (onClick) Color.Red else Color.White ,
-                shape = RoundedCornerShape(13.dp)
-        ) ,
-        contentAlignment = Alignment.Center) {
-        Text(text = priority,
-             modifier = Modifier.padding(top = 5.dp, start = 12.dp, end = 12.dp, bottom = 5.dp),
-             color = if (onClick) Color.White else Color.Black)
+fun PriorityType(isSelected: Boolean, onClick: () -> Unit, priority: String, modifier: Modifier = Modifier) {
+    Box(
+            modifier = modifier
+                .clickable { onClick() }
+                .background(
+                        color = if (isSelected) Color.Red else Color.White,
+                        shape = RoundedCornerShape(13.dp)
+                ),
+            contentAlignment = Alignment.Center
+    ) {
+        Text(
+                text = priority,
+                modifier = Modifier.padding(top = 5.dp, start = 12.dp, end = 12.dp, bottom = 5.dp),
+                color = if (isSelected) Color.White else Color.Black
+        )
     }
 }
 
@@ -129,6 +156,7 @@ fun TaskType(onClick: Boolean, priority: String, modifier: Modifier = Modifier){
 fun InputText(
     modifier: Modifier = Modifier ,
     text: String ,
+    label: String ,
     onTextChange: (String) -> Unit ,
     singleLine: Boolean , ) {
 
@@ -136,7 +164,7 @@ fun InputText(
             value = text,
             onValueChange = { onTextChange(it) },
             singleLine = singleLine,
-            label = { Text(text = "TasK Title")},
+            label = { Text(text = label)},
             modifier = modifier,
 //            colors = TextFieldDefaults.outlinedTextFieldColors(
 //                    focusedBorderColor = Color.Transparent,
