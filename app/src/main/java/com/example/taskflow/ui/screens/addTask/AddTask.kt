@@ -1,4 +1,4 @@
-package com.example.taskflow.ui.screens
+package com.example.taskflow.ui.screens.addTask
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -83,23 +83,23 @@ fun AddTaskScreen(navigateBack: () -> Unit, modifier: Modifier = Modifier){
             Spacer(modifier = Modifier.height(12.dp))
             Row {
                 PriorityType(
-                        isSelected = selectedPriority == Priority.Basic,
-                        onClick = { selectedPriority = Priority.Basic },
-                        priority = "Basic",
+                        isSelected = selectedPriority == Priority.Basic ,
+                        onClick = { selectedPriority = Priority.Basic } ,
+                        priority = "Basic" ,
                         modifier = Modifier.weight(1f)
                 )
                 Spacer(modifier = modifier.width(8.dp))
                 PriorityType(
-                        isSelected = selectedPriority == Priority.Urgent,
-                        onClick = { selectedPriority = Priority.Urgent },
-                        priority = "Urgent",
+                        isSelected = selectedPriority == Priority.Urgent ,
+                        onClick = { selectedPriority = Priority.Urgent } ,
+                        priority = "Urgent" ,
                         modifier = Modifier.weight(1f)
                 )
                 Spacer(modifier = modifier.width(8.dp))
                 PriorityType(
-                        isSelected = selectedPriority == Priority.Important,
-                        onClick = { selectedPriority = Priority.Important },
-                        priority = "Important",
+                        isSelected = selectedPriority == Priority.Important ,
+                        onClick = { selectedPriority = Priority.Important } ,
+                        priority = "Important" ,
                         modifier = Modifier.weight(1f)
                 )
             }
@@ -117,6 +117,7 @@ fun AddTaskScreen(navigateBack: () -> Unit, modifier: Modifier = Modifier){
 fun AddTaskTopBar(navigateBack: () -> Unit, modifier: Modifier = Modifier){
     TopAppBar(
             title = { /*TODO*/ } ,
+            modifier = Modifier.padding(start = 10.dp, end = 10.dp),
             navigationIcon = {
                 // Image on the left
                 Image(

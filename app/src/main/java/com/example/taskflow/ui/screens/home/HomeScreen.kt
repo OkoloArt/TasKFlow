@@ -1,4 +1,4 @@
-package com.example.taskflow.ui.screens
+package com.example.taskflow.ui.screens.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -40,7 +40,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.taskflow.R
@@ -57,7 +56,7 @@ import com.example.taskflow.ui.theme.PurpleGrey40
 fun HomeScreen(navigateToAddTask: () -> Unit, navigateToDetails: () -> Unit){
 
     Scaffold(
-            topBar = { HomeScreenTopBar(navigateToAddTask)}
+            topBar = { HomeScreenTopBar(navigateToAddTask) }
     ) { innerPadding ->
 
         Column(modifier = Modifier
@@ -108,6 +107,7 @@ fun HomeScreen(navigateToAddTask: () -> Unit, navigateToDetails: () -> Unit){
 @Composable
 fun HomeScreenTopBar(navigateToAddTask : () -> Unit){
     TopAppBar(title = {} ,
+              modifier = Modifier.padding(start = 10.dp, end = 10.dp),
               navigationIcon = {
                   // Image on the left
                   Image(
@@ -220,7 +220,7 @@ fun IntroText(modifier: Modifier){
 fun TaskItemCard(onClick: () -> Unit, modifier: Modifier = Modifier){
     Card(modifier = modifier.fillMaxWidth()
         .clickable { onClick() },
-         shape = RoundedCornerShape(25.dp)) {
+         shape = RoundedCornerShape(18.dp)) {
         Column(modifier = Modifier.padding(10.dp, bottom = 12.dp, top = 12.dp)) {
             Row(modifier = Modifier.fillMaxWidth().padding(end = 10.dp),
                 verticalAlignment = Alignment.CenterVertically) {

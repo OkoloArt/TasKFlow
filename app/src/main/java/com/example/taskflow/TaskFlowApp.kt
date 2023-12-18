@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.taskflow.ui.screens.AddTaskScreen
-import com.example.taskflow.ui.screens.HomeScreen
-import com.example.taskflow.ui.screens.TaskDetailScreen
+import com.example.taskflow.ui.screens.addTask.AddTaskScreen
+import com.example.taskflow.ui.screens.home.HomeScreen
+import com.example.taskflow.ui.screens.taskDetail.TaskDetailScreen
 
 enum class Screen(){
     Home,
