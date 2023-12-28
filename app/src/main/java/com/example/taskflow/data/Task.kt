@@ -7,16 +7,15 @@ import com.example.taskflow.ui.screens.addTask.Priority
 @Entity(tableName = "tasks")
 data class Task(
     @PrimaryKey(autoGenerate = true)
-    var taskId: Int = 0 ,
-    var taskTitle: String = "" ,
-    var taskDescription: String = "" ,
-    var dueDate: String = "" ,
-    var priority: Priority ,
-    var subTasks: List<SubTasks> = emptyList()
+    val taskId: Int = 0 ,
+    val taskTitle: String = "" ,
+    val taskDescription: String = "" ,
+    val dueDate: String = "" ,
+    val priority: Priority = Priority.Basic ,
+   // val subTasks: List<SubTasks> = emptyList()
 )
 
-
 data class SubTasks(
-    var subtaskTitle: String = "" ,
-    var subtaskDescription : String = ""
+    val subtaskTitle: String = "" ,
+    val subtaskDescription : String = ""
 )

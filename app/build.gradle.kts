@@ -79,6 +79,7 @@ dependencies {
     implementation("androidx.room:room-runtime:${rootProject.extra["room_version"]}")
     ksp("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
     implementation("androidx.navigation:navigation-compose:${rootProject.extra["nav_version"]}")
+    implementation ("com.google.code.gson:gson:2.8.9") // Check for the latest version
 
     implementation("androidx.compose.material:material-icons-extended")
 }
