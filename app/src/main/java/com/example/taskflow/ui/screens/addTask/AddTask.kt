@@ -3,6 +3,7 @@ package com.example.taskflow.ui.screens.addTask
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +29,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -36,6 +38,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.taskflow.ui.AppViewModelProvider
+import kotlinx.coroutines.launch
 
 enum class Priority {
     Basic,
@@ -45,11 +50,15 @@ enum class Priority {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddTaskScreen(navigateBack: () -> Unit, modifier: Modifier = Modifier){
+fun AddTaskScreen(navigateBack: () -> Unit,
+                  modifier: Modifier = Modifier,
+                  viewModel: AddTaskViewModel = viewModel(factory = AppViewModelProvider.factory)){
 
-    var taskTitle by rememberSaveable { mutableStateOf("") }
+  //  var taskTitle by rememberSaveable { mutableStateOf("") }
     var taskDescription by rememberSaveable { mutableStateOf("") }
     var selectedPriority by rememberSaveable { mutableStateOf(Priority.Basic) }
+    val taskDetails: TaskDetails = TaskDetails()
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(topBar = { AddTaskTopBar(navigateBack = navigateBack) }) { innerPadding ->
         Column(modifier = Modifier
@@ -57,54 +66,13 @@ fun AddTaskScreen(navigateBack: () -> Unit, modifier: Modifier = Modifier){
             .padding(10.dp)) {
             Text(text = "Task")
             Spacer(modifier = Modifier.height(13.dp))
-            InputText(
-                    text = taskTitle ,
-                    onTextChange = { taskTitle = it } ,
-                    singleLine = true ,
-                    label = "Title",
-                    modifier = Modifier.fillMaxWidth())
+            AddEntryBody(addItemUiState = viewModel.addItemUiState ,
+                         onTextChange = viewModel::updateUiState )
             Spacer(modifier = Modifier.height(12.dp))
-            Text(text = "What's the task all about?")
-            Spacer(modifier = Modifier.height(12.dp))
-            InputText(
-                    text = taskDescription ,
-                    onTextChange = { taskDescription = it } ,
-                    singleLine = false ,
-                    label = "Short Description",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp))
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(text = "Due Date")
-            Spacer(modifier = Modifier.height(12.dp))
-            DateSelection()
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(text ="Task Priority" )
-            Spacer(modifier = Modifier.height(12.dp))
-            Row {
-                PriorityType(
-                        isSelected = selectedPriority == Priority.Basic ,
-                        onClick = { selectedPriority = Priority.Basic } ,
-                        priority = "Basic" ,
-                        modifier = Modifier.weight(1f)
-                )
-                Spacer(modifier = modifier.width(8.dp))
-                PriorityType(
-                        isSelected = selectedPriority == Priority.Urgent ,
-                        onClick = { selectedPriority = Priority.Urgent } ,
-                        priority = "Urgent" ,
-                        modifier = Modifier.weight(1f)
-                )
-                Spacer(modifier = modifier.width(8.dp))
-                PriorityType(
-                        isSelected = selectedPriority == Priority.Important ,
-                        onClick = { selectedPriority = Priority.Important } ,
-                        priority = "Important" ,
-                        modifier = Modifier.weight(1f)
-                )
-            }
-            Spacer(modifier = Modifier.height(12.dp))
-            Button(onClick = { /*TODO*/ },
+            Button(onClick = {
+                coroutineScope.launch {
+                viewModel.saveTask()
+            } },
                    modifier = Modifier.fillMaxWidth()) {
                 Text(text = "Create Task")
             }
@@ -139,7 +107,7 @@ fun PriorityType(isSelected: Boolean, onClick: () -> Unit, priority: String, mod
             modifier = modifier
                 .clickable { onClick() }
                 .background(
-                        color = if (isSelected) Color.Red else Color.White,
+                        color = if (isSelected) Color.Red else Color.White ,
                         shape = RoundedCornerShape(13.dp)
                 ),
             contentAlignment = Alignment.Center
@@ -152,6 +120,32 @@ fun PriorityType(isSelected: Boolean, onClick: () -> Unit, priority: String, mod
     }
 }
 
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddEntryBody(
+    addItemUiState: AddItemUiState,
+    onTextChange: (TaskDetails) -> Unit
+){
+    Column(verticalArrangement = Arrangement.spacedBy(15.dp)) {
+        OutlinedTextField(
+                value = addItemUiState.taskDetails.taskTitle ,
+                onValueChange = { onTextChange(addItemUiState.taskDetails.copy(taskTitle = it)) } ,
+                singleLine = true ,
+                label = { Text(text = "Add Title") } ,
+                modifier = Modifier ,
+        )
+
+        OutlinedTextField(
+                value = addItemUiState.taskDetails.taskDescription ,
+                onValueChange = { onTextChange(addItemUiState.taskDetails.copy(taskDescription = it)) } ,
+                singleLine = true ,
+                label = { Text(text = "Add Description") } ,
+                modifier = Modifier ,
+        )
+    }
+
+}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InputText(
